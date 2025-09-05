@@ -104,6 +104,9 @@ const { projects } = Astro.props;
       card.addEventListener('click', () => {
         const id = card.dataset.projectId;
         const modal = document.getElementById(`modal-${id}`);
+        if (modal) {  // Vérifie que 'modal' n'est pas null
+          modal.classList.remove('hidden');
+        }
         if (modal) modal.classList.remove('hidden');
       });
     });
@@ -111,13 +114,16 @@ const { projects } = Astro.props;
     // Fermer la modale au clic sur le bouton × ou en dehors de la modale
     document.querySelectorAll('.modal').forEach(modal => {
       modal.addEventListener('click', (e) => {
-        if (e.target.classList.contains('modal')) {
+    if (e.target instanceof HTMLElement && e.target.classList.contains('modal')) {
+      modal.classList.add('hidden');
+    }
+      });
+      const closeButton = modal.querySelector('[data-close-button]');
+      if (closeButton) {  // Vérifie que le bouton existe
+        closeButton.addEventListener('click', () => {
           modal.classList.add('hidden');
-        }
-      });
-      modal.querySelector('[data-close-button]').addEventListener('click', () => {
-        modal.classList.add('hidden');
-      });
+        });
+      }
     });
   });
 </script>
