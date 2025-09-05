@@ -5,69 +5,119 @@ import { kFormatter } from '../utils'
 import GithubWhite from '@src/assets/img/github-mark-white.svg';
 import GithubBlack from '@src/assets/img/github-mark.svg';
 
-const { projects } = Astro.props
-
+const { projects } = Astro.props;
 ---
+
 <div class="grid grid-cols-12 gap-5">
   {
-    projects.map((project: Project) => 
-      <div class="col-span-12 sm:col-span-6 lg:col-span-4 border dark:border-zinc-700 rounded-xl shadow-sm p-5">
-        <div class="flex justify-between items-center">
-          <div class='flex gap-2'>
-            {
-              (project.tags || [] )?.map((tag: string) => (
-                <span
-                  class='border border-zinc-300 dark:border-zinc-700 rounded-2xl
-                    text-sm text-zinc-700 dark:text-zinc-300 no-underline px-2 py-0.5
-                    transition-all duration-700
-                  hover:border-zinc-700 dark:hover:border-zinc-300'
-                  >
-                  {tag}
-                </span>
-              ))
-            }
-          </div>
-
-          {project.stargazers_count !== undefined && (
-            <div class='shrink-0'>
-              <a
-                href={project.html_url}
-                target="_blank"
-                class='border border-zinc-300 dark:border-zinc-700 rounded-2xl
-                    text-xs text-zinc-700 dark:text-zinc-300 no-underline px-2 py-0.5
-                    transition-all duration-700
-                  hover:border-zinc-700 dark:hover:border-zinc-300
-                    flex items-center gap-1
-              '>
-                <Image src={GithubBlack} height={12} class='dark:hidden' alt='Github stars' />
-                <Image src={GithubWhite} height={12} class='hidden dark:block' alt='Github stars' />
-                {kFormatter(project.stargazers_count)} stars
-              </a>
+    projects.map((project: Project) =>
+      <div class="relative col-span-12 sm:col-span-6 lg:col-span-4">
+        <!-- Carte Projet avec data-id et class pour JS -->
+        <div
+          class="project-card border dark:border-zinc-700 rounded-xl shadow-sm p-5 cursor-pointer"
+          data-project-id={project.id}
+        >
+          <!-- Contenu de la carte -->
+          <div class="flex justify-between items-center">
+            <div class='flex gap-2'>
+              {
+                (project.tags || []).map((tag: string) => (
+                  <span class='border border-zinc-300 dark:border-zinc-700 rounded-2xl text-sm text-zinc-700 dark:text-zinc-300 no-underline px-2 py-0.5 hover:border-zinc-700 dark:hover:border-zinc-300 transition-all duration-700'>
+                    {tag}
+                  </span>
+                ))
+              }
             </div>
-          )}
+            {project.stargazers_count !== undefined && (
+              <div class='shrink-0'>
+                <a
+                  href={project.html_url}
+                  target="_blank"
+                  class='border border-zinc-300 dark:border-zinc-700 rounded-2xl text-xs text-zinc-700 dark:text-zinc-300 no-underline px-2 py-0.5 flex items-center gap-1 hover:border-zinc-700 dark:hover:border-zinc-300 transition-all duration-700'>
+                  {/* Github star icons */}
+                  {project.stargazers_count} stars
+                </a>
+              </div>
+            )}
+          </div>
+          <h3 class="font-semibold my-2">{project.name}</h3>
+          <div class="line-clamp-2 text-zinc-600 dark:text-zinc-300 mb-4 min-h-[50px]">
+            <p>{project.description}</p>
+          </div>
         </div>
-        <h3 class="font-semibold my-2">
-          <a class="underline" href={project.demoLink} target="_blank" rel={project.demoLinkRel}>{project.name}</a>
-        </h3>
-        <div class="line-clamp-2 text-zinc-600 dark:text-zinc-300 mb-4 min-h-[50px]">
-          <p>{project.description}</p>
-        </div>
-        <div class="flex justify-end gap-3">
-          {
-            project.postLink &&
-            <a class="underline flex items-center gap-2" href={project.postLink}>
-              Article
-            </a>
-          }
-          {
-            project.demoLink &&  // This line adds the conditional check for the Demo link
-            <a class="underline flex items-center gap-2" href={project.demoLink} target="_blank" rel={project.demoLinkRel}>
-              Demo 
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
-            </a>
-          }
+
+        <!-- Modale cachée -->
+        <div
+          id={`modal-${project.id}`}
+          class="modal fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center hidden"
+        >
+          <div class="bg-white dark:bg-zinc-900 p-6 max-w-xl w-full rounded-xl relative shadow-lg text-sm max-h-[90vh] overflow-auto">
+            <button
+              class="absolute top-2 right-3 text-xl text-gray-600 hover:text-black dark:text-gray-300"
+              data-close-button
+            >×</button>
+
+            <h2 class="text-2xl font-bold mb-2">{project.name}</h2>
+            <p class="mb-4">{project.description}</p>
+
+            {project.issues && (
+              <>
+                <h3 class="font-semibold mt-2">Problématiques rencontrées & solutions :</h3>
+                <ul class="list-disc ml-5 mt-1">
+                  {project.issues.map(issue => <li>{issue}</li>)}
+                </ul>
+              </>
+            )}
+
+            {project.skills && (
+              <>
+                <h3 class="font-semibold mt-4">Compétences développées :</h3>
+                <ul class="list-disc ml-5 mt-1">
+                  {project.skills.map(skill => <li>{skill}</li>)}
+                </ul>
+              </>
+            )}
+
+            <div class="mt-5 flex gap-4 flex-wrap">
+              {project.demoLink && (
+                <a class="underline text-blue-600 hover:text-blue-800" href={project.demoLink} target="_blank">
+                  Lien GitHub
+                </a>
+              )}
+              {project.postLink && (
+                <a class="underline text-blue-600 hover:text-blue-800" href={project.postLink} target="_blank">
+                  Article associé
+                </a>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     )
   }
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Ouvrir la modale au clic sur la carte
+    document.querySelectorAll('.project-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.dataset.projectId;
+        const modal = document.getElementById(`modal-${id}`);
+        if (modal) modal.classList.remove('hidden');
+      });
+    });
+
+    // Fermer la modale au clic sur le bouton × ou en dehors de la modale
+    document.querySelectorAll('.modal').forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal')) {
+          modal.classList.add('hidden');
+        }
+      });
+      modal.querySelector('[data-close-button]').addEventListener('click', () => {
+        modal.classList.add('hidden');
+      });
+    });
+  });
+</script>
