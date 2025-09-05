@@ -8,11 +8,9 @@ import partytown from "@astrojs/partytown";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://devolio.devaradise.com',
+  site: 'https://0-br-0.github.io/Projet8/',
+  base: '/Projet8',
   integrations: [mdx(), sitemap(), tailwind(), partytown()],
-  build: {
-    outDir: 'build',
-  },
   markdown: {
     extendDefaultPlugins: true,
     rehypePlugins: [[autoNewTabExternalLinks, {

@@ -39,7 +39,7 @@ const top3Projects = projects.slice(0, 3);
 <div class='mt-6 mb-12'>
   <div class="flex justify-between gap-2 border-b mb-1 dark:border-b-zinc-700">
     <h2 class="text-lg font-bold mb-3">Compétences clés</h2>
-    <a href="/posts/" class="inline-block py-2 underline dark:prose-invert">Voir plus &raquo;</a>
+    <a href={`${import.meta.env.BASE_URL}posts/`} class="inline-block py-2 underline dark:prose-invert">Voir plus &raquo;</a>
   </div>
   <div>
     {
@@ -52,7 +52,7 @@ const top3Projects = projects.slice(0, 3);
 <div>
         <div class="flex justify-between gap-2 mb-1">
           <h2 class="text-lg font-bold mb-3">Mes Projets</h2>
-          <a href="/projects/" class="inline-block py-2 underline dark:prose-invert">Voir plus &raquo;</a>
+          <a href={`${import.meta.env.BASE_URL}projects/`} class="inline-block py-2 underline dark:prose-invert">Voir plus &raquo;</a>
         </div>
         <ProjectList projects={top3Projects}/>
       </div>
