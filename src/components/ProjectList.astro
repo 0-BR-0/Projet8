@@ -102,12 +102,12 @@ const { projects } = Astro.props;
     // Ouvrir la modale au clic sur la carte
     document.querySelectorAll('.project-card').forEach(card => {
       card.addEventListener('click', () => {
-        const id = card.dataset.projectId;
+        const cardElement = card as HTMLElement;  // Cast explicite de 'card' en 'HTMLElement'
+        const id = cardElement.dataset.projectId; // Accède maintenant à 'dataset'
         const modal = document.getElementById(`modal-${id}`);
-        if (modal) {  // Vérifie que 'modal' n'est pas null
+        if (modal) {
           modal.classList.remove('hidden');
         }
-        if (modal) modal.classList.remove('hidden');
       });
     });
 
