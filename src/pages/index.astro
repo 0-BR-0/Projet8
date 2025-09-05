@@ -8,6 +8,10 @@ import { projects } from './projects/projects';
 import ProjectList from '../components/ProjectList.astro'
 import PostItem from '../components/PostItem.astro';
 import { skills } from './posts/skills.ts';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+type BlogPost = CollectionEntry<'blog'>;
 
 const topSkills = skills.slice(0, 3);
 

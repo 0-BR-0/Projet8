@@ -10,6 +10,9 @@ import partytown from "@astrojs/partytown";
 export default defineConfig({
   site: 'https://devolio.devaradise.com',
   integrations: [mdx(), sitemap(), tailwind(), partytown()],
+  build: {
+    outDir: 'build',
+  },
   markdown: {
     extendDefaultPlugins: true,
     rehypePlugins: [[autoNewTabExternalLinks, {
