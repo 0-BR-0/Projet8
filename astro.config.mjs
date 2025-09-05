@@ -9,7 +9,7 @@ import partytown from "@astrojs/partytown";
 // https://astro.build/config
 export default defineConfig({
   site: 'https://0-br-0.github.io/Projet8/',
-  base: '/Projet8',
+  // base: '/Projet8',
   integrations: [mdx(), sitemap(), tailwind(), partytown()],
   markdown: {
     extendDefaultPlugins: true,
